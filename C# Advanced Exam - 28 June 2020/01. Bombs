@@ -1,0 +1,96 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Linq;
+using System.Text.RegularExpressions;
+
+namespace _01._Bombs
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            List<int> bombEffects = Console.ReadLine().Split(", " ,StringSplitOptions.RemoveEmptyEntries)
+                                    .Select(int.Parse).ToList();
+            List<int> bombCasing = Console.ReadLine().Split(", ", StringSplitOptions.RemoveEmptyEntries)
+                                   .Select(int.Parse).ToList();
+            SortedDictionary<string, int> bombTypes = new SortedDictionary<string, int>();
+            bombTypes.Add("Datura Bombs", 0);
+            bombTypes.Add("Cherry Bombs", 0);
+            bombTypes.Add("Smoke Decoy Bombs", 0);
+            bool is3bombsOfType = false;
+            List<int> reversedCasing = new List<int>();
+            for(int i = bombCasing.Count - 1; i >= 0; i--)
+            {
+                reversedCasing.Add(bombCasing[i]);
+            }
+            for(int i = 0; ;)
+            {
+                if(bombEffects.Count == 0 || reversedCasing.Count == 0)
+                {
+                    break;  
+                }
+                
+                int sum = bombEffects[i] + reversedCasing[i];
+                if(sum == 40)
+                {
+                    
+                    bombTypes["Datura Bombs"]++;
+                    bombEffects.Remove(bombEffects[i]);
+                    reversedCasing.Remove(reversedCasing[i]);
+                }
+                else if(sum == 60)
+                {
+                   
+                    bombTypes["Cherry Bombs"]++;
+                    bombEffects.Remove(bombEffects[i]);
+                    reversedCasing.Remove(reversedCasing[i]);
+                }
+                else if(sum == 120)
+                {
+                    
+                    bombTypes["Smoke Decoy Bombs"]++;
+                    bombEffects.Remove(bombEffects[i]);
+                    reversedCasing.Remove(reversedCasing[i]);
+                }
+                if (bombTypes["Datura Bombs"] >= 3 && bombTypes["Cherry Bombs"] >= 3 && bombTypes["Smoke Decoy Bombs"] >= 3)
+                {
+                    is3bombsOfType = true;
+                    break;
+                }
+                else if(sum != 40 && sum != 60 && sum != 120)
+                {
+                    reversedCasing[i] -= 5;
+                }
+            }
+            if(is3bombsOfType)
+            {
+                Console.WriteLine("Bene! You have successfully filled the bomb pouch!");
+            }
+            if (is3bombsOfType == false)
+            {
+                Console.WriteLine("You don't have enough materials to fill the bomb pouch.");
+            }
+            if(bombEffects.Count == 0)
+            {
+                Console.WriteLine("Bomb Effects: empty");
+            }
+            if (bombEffects.Count > 0)
+            {
+                Console.WriteLine("Bomb Effects: " + String.Join(", ", bombEffects));
+            }
+            if(reversedCasing.Count == 0)
+            {
+                Console.WriteLine("Bomb Casings: empty");
+            }
+            if(reversedCasing.Count > 0)
+            {
+                Console.WriteLine("Bomb Casings: " + String.Join(", " ,reversedCasing));
+            }
+            foreach(var bombType in bombTypes)
+            {
+                Console.WriteLine($"{bombType.Key}: {bombType.Value}");
+            }
+        }
+    }
+}
