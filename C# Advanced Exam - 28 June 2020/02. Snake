@@ -1,0 +1,151 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Data;
+
+namespace _02._Snake
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int size = int.Parse(Console.ReadLine());
+            char[,] matrix = new char[size, size];  
+            int currentRow = 0;
+            int currentCol = 0;
+            int food = 0;
+            bool isOutOfMatrix = false;
+            bool isEatenEnoughFood = false;
+            List<int> burrows = new List<int>();
+            for(int row = 0; row < size; row++)
+            {
+                char[] chars = Console.ReadLine().Replace(" ", "").ToCharArray();
+                for(int col = 0; col < size; col++)
+                {
+                    matrix[row, col] = chars[col];
+                    if (matrix[row, col] == 'S')
+                    {
+                        currentRow = row;
+                        currentCol = col;
+                    }
+                    if(matrix[row, col] == 'B')
+                    {
+                        burrows.Add(row);
+                        burrows.Add(col);
+                    }
+                }
+            }
+            string command = Console.ReadLine();
+            while(true)
+            {
+                matrix[currentRow, currentCol] = '.';
+                if(command == "up")
+                {
+                    if(currentRow <= 0)
+                    {
+                        isOutOfMatrix = true;
+                        break;
+                    }
+                    else
+                    {
+                        currentRow--;
+                        
+                    }
+                }
+                if(command == "down")
+                {
+                    if(currentRow >= size - 1)
+                    {
+                        isOutOfMatrix |= true;
+                        break;
+                    }
+                    else
+                    {
+                        currentRow++;
+                        
+                    }
+                }
+                if(command == "left")
+                {
+                    if(currentCol <= 0)
+                    {
+                        isOutOfMatrix = true;
+                        break;
+                    }
+                    else
+                    {
+                        currentCol--;
+                        
+                    }
+                }
+                if(command == "right")
+                {
+                    if(currentCol >= size - 1)
+                    {
+                        isOutOfMatrix = true;
+                        break;
+                    }
+                    else
+                    {
+                        currentCol++;
+                        
+                    }
+                }
+                if(matrix[currentRow, currentCol] == 'B')
+                {
+                    if(currentRow == burrows[0] && currentCol == burrows[1])
+                    {
+                        matrix[currentRow, currentCol] = '.';
+                        currentRow = burrows[2];
+                        currentCol = burrows[3];
+                        matrix[currentRow, currentCol] = '.';
+                        command = Console.ReadLine();
+                        continue;
+                    }
+                    if (currentRow == burrows[2] && currentCol == burrows[3])
+                    {
+                        matrix[currentRow, currentCol] = '.';
+                        currentRow = burrows[0];
+                        currentCol = burrows[1];
+                        matrix[currentRow, currentCol] = '.';
+                    }
+                }
+                if (matrix[currentRow, currentCol] == '*')
+                {
+                    food++;
+                    matrix[currentRow, currentCol] = '.';
+                    if(food >= 10)
+                    {
+                        isEatenEnoughFood = true;
+                        break;
+                    }
+                }
+                matrix[currentRow, currentCol] = '.';
+                command = Console.ReadLine();
+            }
+            if(isOutOfMatrix)
+            {
+                Console.WriteLine("Game over!");
+            }
+            if(isEatenEnoughFood)
+            {
+                Console.WriteLine("You won! You fed the snake.");
+            }
+            Console.WriteLine($"Food eaten: {food}");
+            for(int row = 0; row < size; row++)
+            {
+                for(int col = 0; col < size; col++)
+                {
+                    if(isEatenEnoughFood)
+                    {
+                        matrix[currentRow, currentCol] = 'S';
+                    }
+                    Console.Write(matrix[row, col]);
+                }
+                Console.WriteLine();
+            }
+        }
+    }
+}
