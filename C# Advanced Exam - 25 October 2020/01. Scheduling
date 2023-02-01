@@ -1,0 +1,46 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+
+namespace _01._Scheduling
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            List<int> tasks = Console.ReadLine().Split(", ", StringSplitOptions.RemoveEmptyEntries)
+                              .Select(int.Parse).ToList();
+            List<int> threads = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                             .Select(int.Parse).ToList();
+            int valueOfTheTask = int.Parse(Console.ReadLine());
+            
+            List<int> reversedTasks = new List<int>();
+            for(int i = tasks.Count - 1; i >= 0; i--)
+            {
+                reversedTasks.Add(tasks[i]);    
+            }
+            for(int i = 0; ;)
+            {
+                if (reversedTasks[i] == valueOfTheTask)
+                {
+                    Console.WriteLine($"Thread with value {threads[i]} killed task {valueOfTheTask}");
+                    Console.WriteLine(String.Join(" ", threads));
+                    return;
+                }
+                if (threads[i] >= reversedTasks[i])
+                {
+                    reversedTasks.Remove(reversedTasks[i]);
+                    threads.Remove(threads[i]);
+                    continue;
+                }
+                if (threads[i] < reversedTasks[i])
+                {
+                    threads.Remove(threads[i]);
+                }
+            }
+        }
+    }
+}
