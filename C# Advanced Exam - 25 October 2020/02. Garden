@@ -1,0 +1,59 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Data;
+
+namespace _02._Garden
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] sizeMatrix = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                           .Select(int.Parse).ToArray();
+            int[,] matrix = new int[sizeMatrix[0], sizeMatrix[1]];
+            string command = Console.ReadLine();
+            while(command != "Bloom Bloom Plow")
+            {
+                int[] coordRowCol = command.Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                                   .Select(int.Parse).ToArray();
+                int currentRow = coordRowCol[0];
+                int currentCol = coordRowCol[1];
+                if(currentRow < 0 || currentRow > sizeMatrix[0] - 1
+                    || currentCol < 0 || currentCol > sizeMatrix[1] - 1)
+                {
+                    Console.WriteLine("Invalid coordinates.");
+                    command = Console.ReadLine();
+                    continue;
+                }
+                for(int row = 0; row < sizeMatrix[0]; row++)
+                {
+                    for(int col = 0; col < sizeMatrix[1]; col++)
+                    {
+                        if(row == currentRow)
+                        {
+                            matrix[currentRow, col]++;
+                        }
+                        if(col == currentCol)
+                        {
+                            matrix[row, currentCol]++;
+                        }
+                    }
+                }
+                 matrix[currentRow, currentCol]--;
+                command = Console.ReadLine();
+            }
+            for(int row = 0; row < sizeMatrix[0]; row++)
+            {
+                for(int col = 0; col < sizeMatrix[1]; col++)
+                {
+                    Console.Write(matrix[row, col] + " ");
+                }
+                Console.WriteLine();
+            }
+        }
+    }
+}
