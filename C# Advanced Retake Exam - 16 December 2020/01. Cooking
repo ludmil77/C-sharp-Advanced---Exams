@@ -1,0 +1,125 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Linq;
+using System.Text;
+
+namespace _01._Cooking
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            List<int> liquids = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                               .Select(int.Parse).ToList();
+            List<int> ingredients = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                              .Select(int.Parse).ToList();
+            List<int> reversedIngr = new List<int>();
+            int[] ints = { 25, 50, 75, 100 };
+            SortedDictionary<string, int> products = new SortedDictionary<string, int>();
+            Dictionary<string, int> counter = new Dictionary<string, int>();
+            products.Add("Bread", 0);
+            products.Add("Cake", 0);
+            products.Add("Pastry", 0);
+            products.Add("Fruit Pie", 0);
+            for (int i = ingredients.Count - 1; i >= 0; i--)
+            {
+                reversedIngr.Add(ingredients[i]);
+            }
+            for(int i = 0; ;)
+            {
+                if(liquids.Count == 0)
+                {
+                    break;
+                }
+                if(reversedIngr.Count == 0)
+                {
+                    break;
+                }
+                int sum = 0;
+                sum = liquids[i] + reversedIngr[i];
+                if(sum == 25)
+                {
+                    products["Bread"]++;
+                    liquids.Remove(liquids[i]);
+                    reversedIngr.Remove(reversedIngr[i]);
+                    if(!counter.ContainsKey("Bread"))
+                    {
+                        counter.Add("Bread", 0);
+                    }
+                    counter["Bread"]++;
+                }
+                if(sum == 50)
+                {
+                    products["Cake"]++;
+                    liquids.Remove(liquids[i]);
+                    reversedIngr.Remove(reversedIngr[i]);
+                    if (!counter.ContainsKey("Cake"))
+                    {
+                        counter.Add("Cake", 0);
+                    }
+                    counter["Cake"]++;
+                }
+                if(sum == 75)
+                {
+                    products["Pastry"]++;
+                    liquids.Remove(liquids[i]);
+                    reversedIngr.Remove(reversedIngr[i]);
+                    if (!counter.ContainsKey("Pastry"))
+                    {
+                        counter.Add("Pastry", 0);
+                    }
+                    counter["Pastry"]++;
+                }
+                if(sum == 100)
+                {
+                    products["Fruit Pie"]++;
+                    liquids.Remove(liquids[i]);
+                    reversedIngr.Remove(reversedIngr[i]);
+                    if (!counter.ContainsKey("Fruit Pie"))
+                    {
+                        counter.Add("Fruit Pie", 0);
+                    }
+                    counter["Fruit Pie"]++;
+                }
+                if(!ints.Contains(sum))
+                {
+                    reversedIngr[i] += 3;
+                    liquids.Remove(liquids[i]);
+                }
+            }
+            
+            if(counter.Count == 4)
+            {
+                Console.WriteLine("Wohoo! You succeeded in cooking all the food!");
+            }
+            if(counter.Count < 4)
+            {
+                Console.WriteLine("Ugh, what a pity! You didn't have enough materials to cook everything.");
+            }
+            if(liquids.Count == 0)
+            {
+                Console.WriteLine("Liquids left: none");
+            }
+            if(liquids.Count > 0)
+            {
+                Console.WriteLine("Liquids left: " + 
+                    String.Join(", ", liquids));
+            }
+            if(reversedIngr.Count == 0)
+            {
+                Console.WriteLine("Ingredients left: none");
+            }
+            if(reversedIngr.Count > 0)
+            {
+                Console.WriteLine("Ingredients left: " +
+                    String.Join(", ", reversedIngr));
+            }
+            foreach(var product in products)
+            {
+                
+                Console.WriteLine($"{product.Key}: {product.Value}");
+            }
+        }
+    }
+}
