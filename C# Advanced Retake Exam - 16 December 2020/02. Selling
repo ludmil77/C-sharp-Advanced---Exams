@@ -1,0 +1,152 @@
+using System;
+using System.Collections.Generic;
+
+namespace _02._Selling
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int size = int.Parse(Console.ReadLine());
+            char[,] matrix = new char[size, size];
+            List<int> listO = new List<int>();
+            int currentRow = 0;
+            int currentCol = 0;
+            int money = 0;
+            bool isOutOfTheBakery = false;
+            for (int row = 0; row < size; row++)
+            {
+                char[] chars = Console.ReadLine().ToCharArray();
+                for (int col = 0; col < size; col++)
+                {
+                    matrix[row, col] = chars[col];
+                    if (matrix[row, col] == 'O')
+                    {
+                        listO.Add(row);
+                        listO.Add(col);
+
+                    }
+                    if (matrix[row, col] == 'S')
+                    {
+                        currentRow = row;
+                        currentCol = col;
+                    }
+                }
+            }
+            string command = Console.ReadLine();
+            while (true)
+            {
+                
+                if (command == "up")
+                {
+                    if (currentRow <= 0)
+                    {
+                        matrix[currentRow, currentCol] = '-';
+                        isOutOfTheBakery = true;
+                        break;
+                    }
+                    if (currentRow > 0)
+                    {
+                        matrix[currentRow, currentCol] = '-';
+                        currentRow--;
+                    }
+                    
+                }
+                if (command == "down")
+                {
+                    if (currentRow >= size - 1)
+                    {
+                        matrix[currentRow, currentCol] = '-';
+                        isOutOfTheBakery = true;
+                        break;
+                    }
+                    if (currentRow < size - 1)
+                    {
+                        matrix[currentRow, currentCol] = '-';
+                        currentRow++;
+                    }
+                   
+                }
+                if (command == "left")
+                {
+                    if (currentCol <= 0)
+                    {
+                        matrix[currentRow, currentCol] = '-';
+                        isOutOfTheBakery = true;
+                        break;
+                    }
+                    if (currentCol > 0)
+                    {
+                        matrix[currentRow, currentCol] = '-';
+                        currentCol--;
+                    }
+                   
+                }
+                if (command == "right")
+                {
+                    if (currentCol >= size - 1)
+                    {
+                        matrix[currentRow, currentCol] = '-';
+                        isOutOfTheBakery = true;
+                        break;
+                    }
+                    if (currentCol < size - 1)
+                    {
+                        matrix[currentRow, currentCol] = '-';
+                        currentCol++;
+                    }
+                   
+                }
+                if (char.IsDigit(matrix[currentRow, currentCol]))
+                {
+                    money += int.Parse(matrix[currentRow, currentCol].ToString());
+                    matrix[currentRow, currentCol] = '-';
+                    if(money >= 50)
+                    {
+                        break;
+                    }
+                }
+                if(matrix[currentRow, currentCol] == 'O')
+                {
+                    if(currentRow == listO[0] && currentCol == listO[1])
+                    {
+                        matrix[currentRow, currentCol] = '-';
+                        currentRow = listO[2];
+                        currentCol = listO[3];
+                        command = Console.ReadLine();
+                        continue;
+                    }
+                    else if (currentRow == listO[2] && currentCol == listO[3])
+                    {
+                        matrix[currentRow, currentCol] = '-';
+                        currentRow = listO[0];
+                        currentCol = listO[1];
+                    }
+                }
+                command = Console.ReadLine();
+            }
+            if(isOutOfTheBakery)
+            {
+                Console.WriteLine("Bad news, you are out of the bakery.");
+                Console.WriteLine($"Money: {money}");
+            }
+            if(money >= 50)
+            {
+                Console.WriteLine("Good news! You succeeded in collecting enough money!");
+                Console.WriteLine($"Money: {money}");
+            }
+            for(int row = 0; row < size; row++)
+            {
+                for(int col = 0; col < size; col++)
+                {
+                    if(money >= 50)
+                    {
+                        matrix[currentRow, currentCol] = 'S';
+                    }
+                    Console.Write(matrix[row, col]);
+                }
+                Console.WriteLine();
+            }
+        }
+    }
+}
