@@ -1,0 +1,153 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Linq;
+using System.Text;
+namespace _02._Warships_1
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int size = int.Parse(Console.ReadLine());
+            List<string> coord = Console.ReadLine().Trim().Split(",", StringSplitOptions.RemoveEmptyEntries)
+                              .ToList();
+            char[,] matrix = new char[size, size];
+            int player1Ship = 0;
+            int player2Ship = 0;
+            int sunkenShips = 0;
+            
+            if(size < 1)
+            {
+                return;
+            }
+            if(coord.Count == 0)
+            {
+                return;
+            }
+            List<int> current = new List<int>();
+            for (int row = 0; row < size; row++)
+            {
+                char[] chars = Console.ReadLine().Replace(" ", "").Trim().ToCharArray();
+                for (int col = 0; col < size; col++)
+                {
+                    matrix[row, col] = chars[col];
+                    if (matrix[row, col] == '<')
+                    {
+                        player1Ship++;
+                    }
+                    if (matrix[row, col] == '>')
+                    {
+                        player2Ship++;
+                    }
+                }
+            }
+            for (int i = 0; i < coord.Count; i++)
+            {
+                
+               
+                current = coord[i].Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                                        .Select(int.Parse).ToList();
+                int currentRow = current[0];
+                int currentCol = current[1];
+                if (currentRow < 0 || currentRow >= size
+                    || currentCol < 0 || currentCol >= size)
+                {
+                    continue;
+                }
+                if (matrix[currentRow, currentCol] == '>')
+                {
+                    player2Ship--;
+                    sunkenShips++;
+                    matrix[currentRow, currentCol] = 'X';
+                    if (player2Ship == 0)
+                    {
+                        break;
+                        
+                    }
+                    continue;
+                }
+                if (matrix[currentRow, currentCol] == '<')
+                {
+                    player1Ship--;
+                    sunkenShips++;
+                    matrix[currentRow, currentCol] = 'X';
+                    if (player1Ship == 0)
+                    {
+                        break;
+                        
+                    }
+                    continue;
+                }
+                if (matrix[currentRow, currentCol] == '#')
+                {
+                    matrix[currentRow, currentCol] = 'X';
+                    for (int row = currentRow - 1; row <= currentRow + 1; row++)
+                    {
+                        if (row < 0 || row >= size)
+                        {
+                            continue;
+                        }
+                        for (int col = currentCol - 1; col <= currentCol + 1; col++)
+                        {
+                            if (col < 0 || col >= size)
+                            {
+                                continue;
+                            }
+                            if (matrix[row, col] == '<')
+                            {
+                                
+                                matrix[row, col] = 'X';
+                                player1Ship--;
+                                sunkenShips++; 
+                                if (player1Ship == 0)
+                                {
+                                    if(i % 2 != 0)
+                                    {
+                                        break;
+                                    }
+                                    
+                                }
+                                continue;
+                            }
+                            if (matrix[row, col] == '>')
+                            {
+                                matrix[row, col] = 'X';
+                                player2Ship--;
+                                sunkenShips++;
+                                if (player2Ship == 0)
+                                {
+                                    if(i % 2 == 0)
+                                    {
+                                        break;
+                                    }
+                                    
+                                }
+
+                            }
+
+                        }
+                    }
+                }
+            }
+            if (player2Ship == 0)
+            {
+                Console.WriteLine("Player One has won the game! " +
+                    $"{sunkenShips} ships have been sunk in the battle.");
+                return;
+            }
+            if (player1Ship == 0)
+            {
+                Console.WriteLine("Player Two has won the game! " +
+                   $"{sunkenShips} ships have been sunk in the battle.");
+                return;
+            }
+            if (player1Ship > 0 && player2Ship > 0)
+            {
+                Console.WriteLine("It's a draw! " +
+                    $"Player One has {player1Ship} ships left. " +
+                    $"Player Two has {player2Ship} ships left.");
+            }
+        }
+    }
+}
