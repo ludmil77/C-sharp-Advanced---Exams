@@ -1,0 +1,59 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Linq;
+using System.Text;
+
+namespace _01.Warm_Winter
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            List<int> hats = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                             .Select(int.Parse).ToList();
+            List<int> scarfs = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                             .Select(int.Parse).ToList();
+            List<int> sets = new List<int>();
+            List<int> reversedHats = new List<int>();
+            for (int i = hats.Count - 1; i >= 0; i--)
+            {
+                reversedHats.Add(hats[i]);
+            }
+            for (int i = 0; ;)
+            {
+                if (reversedHats.Count == 0)
+                {
+                    break;
+                }
+                if (scarfs.Count == 0)
+                {
+                    break;
+                }
+                if (reversedHats[i] > scarfs[i])
+                {
+                    int sum = reversedHats[i] + scarfs[i];
+                    sets.Add(sum);
+                    reversedHats.Remove(reversedHats[i]);
+                    scarfs.Remove(scarfs[i]);
+                    continue;
+                }
+                if (scarfs[i] > reversedHats[i])
+                {
+                    reversedHats.Remove(reversedHats[i]);
+                    continue;
+                }
+                if (reversedHats[i] == scarfs[i])
+                {
+                    scarfs.Remove(scarfs[i]);
+                    int toInsert = reversedHats[i] + 1;
+                    reversedHats.Remove(reversedHats[i]);
+                    reversedHats.Insert(0, toInsert);
+                }
+            }
+            int maxSets = sets.Max();
+            Console.WriteLine($"The most expensive set is: {maxSets}");
+            Console.WriteLine(String.Join(" ", sets));
+        }
+    }
+}
