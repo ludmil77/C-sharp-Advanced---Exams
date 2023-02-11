@@ -1,0 +1,175 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Linq;
+using System.Text;
+
+namespace _02._Re_Volt
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int sizeMatrix = int.Parse(Console.ReadLine());
+            int countCommands = int.Parse(Console.ReadLine());
+            char[,] matrix = new char[sizeMatrix, sizeMatrix];
+            int currentRow = 0;
+            int currentCol = 0;
+            bool isWin = false;
+            for (int row = 0; row < sizeMatrix; row++)
+            {
+                char[] chars = Console.ReadLine().Replace(" ", "").ToCharArray();
+                for (int col = 0; col < sizeMatrix; col++)
+                {
+                    matrix[row, col] = chars[col];
+                    if (matrix[row, col] == 'f')
+                    {
+                        currentRow = row;
+                        currentCol = col;
+                    }
+                }
+            }
+            matrix[currentRow, currentCol] = '-';
+            for (int i = 0; i < countCommands; i++)
+            {
+                
+                string command = Console.ReadLine();    
+                if (command == "up")
+                {
+                    if (currentRow == 0)
+                    {
+                        currentRow = sizeMatrix - 1;
+                    }
+                    else
+                    {
+                        currentRow--;
+                    }
+                }
+                if (command == "down")
+                {
+                    if (currentRow == sizeMatrix - 1)
+                    {
+                        currentRow = 0;
+                    }
+                    else
+                    {
+                        currentRow++;   
+                    }
+                }
+                if (command == "left")
+                {
+                    if (currentCol == 0)
+                    {
+                        currentCol = sizeMatrix - 1;
+                    }
+                    else
+                    {
+                        currentCol--;
+                    }
+                }
+                if (command == "right")
+                {
+                    if (currentCol == sizeMatrix - 1)
+                    {
+                        currentCol = 0;
+                    }
+                    else
+                    {
+                        currentCol++;
+                    }
+                }
+                if (matrix[currentRow, currentCol] == 'F')
+                {
+                    isWin = true;
+                    break;
+                }
+                if (matrix[currentRow, currentCol] == 'B')
+                {
+                    if (command == "up")
+                    {
+                        if (currentRow == 0)
+                        {
+                            currentRow = sizeMatrix - 1;
+                        }
+                        else
+                        {
+                            currentRow --;
+                        }
+                    }
+                    else if (command == "down")
+                    {
+                        if (currentRow == sizeMatrix - 1)
+                        {
+                            currentRow = 0;
+                        }
+                        else
+                        {
+                            currentRow++;
+                        }
+                    }
+                    else if (command == "left")
+                    {
+                        if (currentCol == 0)
+                        {
+                            currentCol = sizeMatrix - 1;
+                        }
+                        else
+                        {
+                            currentCol--;
+                        }
+                    }
+                    else if (command == "right")
+                    {
+                        if (currentCol == sizeMatrix - 1)
+                        {
+                            currentCol = 0;
+                        }
+                        else
+                        {
+                            currentCol++;
+                        }
+                    }
+                }
+                if (matrix[currentRow, currentCol] == 'T')
+                {
+                    if (command == "up")
+                    {
+                        currentRow++;
+                    }
+                    else if (command == "down")
+                    {
+                        currentRow--;
+                    }
+                    else if (command == "left")
+                    {
+                        currentCol++;
+                    }
+                    else if (command == "right")
+                    {
+                        currentCol --;
+                    }
+                }
+            }
+            if (isWin)
+            {
+                Console.WriteLine("Player won!");
+            }
+            else
+            {
+                Console.WriteLine("Player lost!");
+            }
+            for (int row = 0; row < sizeMatrix; row++)
+            {
+                for (int col = 0; col < sizeMatrix; col++)
+                {
+                    if (row == currentRow && col == currentCol)
+                    {
+                        matrix[row, col] = 'f'; 
+                    }
+                    Console.Write(matrix[row, col]);
+                }
+                Console.WriteLine();
+            }
+        }
+    }
+}
