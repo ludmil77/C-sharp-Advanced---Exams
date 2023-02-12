@@ -1,0 +1,108 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Linq;
+using System.Text.RegularExpressions;
+
+namespace _01.Masterchef
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            List<int> ingredients = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                                    .Select(int.Parse).Where(x => x > 0).ToList();
+            List<int> freshness = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                                   .Select(int.Parse).ToList();
+            List<int> reversedFresh = new List<int>();
+            SortedDictionary<string, int> sorted = new SortedDictionary<string, int>();
+            int[] ints = {150, 250, 300, 400};
+            for (int i = freshness.Count - 1; i >= 0; i--)
+            {
+                reversedFresh.Add(freshness[i]);
+            }
+            for (int i = 0; ; )
+            {
+                if (ingredients.Count == 0)
+                {
+                    break;
+                }
+                if (reversedFresh.Count == 0)
+                {
+                    break;
+                }
+                int product = ingredients[i] * reversedFresh[i];
+                if (product == 150)
+                {
+                    if (!sorted.ContainsKey("Dipping sauce"))
+                    {
+                        sorted.Add("Dipping sauce", 0);
+                    }
+                    sorted["Dipping sauce"]++;
+                    ingredients.Remove(ingredients[i]);
+                    reversedFresh.Remove(reversedFresh[i]);
+                }
+                if (product == 250)
+                {
+                    if (!sorted.ContainsKey("Green salad"))
+                    {
+                        sorted.Add("Green salad", 0);
+                    }
+                    sorted["Green salad"]++;
+                    ingredients.Remove(ingredients[i]);
+                    reversedFresh.Remove(reversedFresh[i]);
+                }
+                if (product == 300)
+                {
+                    if (!sorted.ContainsKey("Chocolate cake"))
+                    {
+                        sorted.Add("Chocolate cake", 0);
+                    }
+                    sorted["Chocolate cake"]++;
+                    ingredients.Remove(ingredients[i]);
+                    reversedFresh.Remove(reversedFresh[i]);
+                }
+                if (product == 400)
+                {
+                    if (!sorted.ContainsKey("Lobster"))
+                    {
+                        sorted.Add("Lobster", 0);
+                    }
+                    sorted["Lobster"]++;
+                    ingredients.Remove(ingredients[i]);
+                    reversedFresh.Remove(reversedFresh[i]);
+                }
+                if (!ints.Contains(product))
+                {
+                    int newIngred = ingredients[i] + 5;
+                    ingredients.Remove(ingredients[i]);
+                    ingredients.Add(newIngred);
+                    reversedFresh.Remove(reversedFresh[i]);
+                }
+            }
+            if (sorted.Count >= 4)
+            {
+                Console.WriteLine("Applause! The judges are fascinated by your dishes!");
+            }
+            if (sorted.Count < 4)
+            {
+                Console.WriteLine("You were voted off. Better luck next year.");
+            }
+            if (ingredients.Count > 0)
+            {
+                Console.WriteLine($"Ingredients left: {ingredients.Sum()}");
+            }
+            if (sorted.Count > 0)
+            {
+                foreach (var dish in sorted)
+                {
+                    if (dish.Value > 0)
+                    {
+                        Console.WriteLine($" # {dish.Key} --> {dish.Value}");
+                    }
+                }
+            }
+           
+        }                           
+    }
+}
