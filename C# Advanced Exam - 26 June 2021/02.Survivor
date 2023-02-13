@@ -1,0 +1,152 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Linq;
+using System.Text;
+
+namespace ConsoleApp1
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int rowsCount = int.Parse(Console.ReadLine());
+            string[][] jagged = new string[rowsCount][];
+            int collectedTokens = 0;
+            int opponentsTokens = 0;
+            int currentRow = 0;
+            int currentCol = 0;
+            for (int row = 0; row < rowsCount; row++)
+            {
+                string[] chars = Console.ReadLine().Split(' ', StringSplitOptions.RemoveEmptyEntries).ToArray();
+                jagged[row] = new string[chars.Length];
+                for (int col = 0; col < chars.Length; col++)
+                {
+                    jagged[row][col] = chars[col];
+                }
+            }
+            string command = Console.ReadLine();
+            while (command != "Gong")
+            {
+                List<string> tokens = command.Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList();
+                if (tokens[0] == "Opponent")
+                {
+                    currentRow = int.Parse(tokens[1]);
+                    currentCol = int.Parse(tokens[2]);
+                    if (currentRow >= 0 && currentRow < jagged.Length
+                        && currentCol >= 0 && currentCol < jagged[currentRow].Length)
+                    {
+                        int counter = 0;
+                        if (tokens[3] == "up")
+                        {
+                            
+                            
+                                for (int row = currentRow; row >= 0; row--)
+                                {
+                                    if (counter > 3)
+                                    {
+                                    break;
+                                    }
+                                    if (jagged[row][currentCol] == "T")
+                                    {
+                                        opponentsTokens++;
+                                        jagged[row][currentCol] = "-";
+                                    }
+                                counter++;
+                                }
+
+                            
+                        }
+                        if (tokens[3] == "down")
+                        {
+                            
+                            
+                                for (int row = currentRow; row <= rowsCount - 1; row++)
+                                {
+                                    if(counter > 3)
+                                    {
+                                    break;
+                                    }
+                                    if (jagged[row][currentCol] == "T")
+                                    {
+                                        opponentsTokens++;
+                                        jagged[row][currentCol] = "-";
+                                    }
+                                counter++;
+                                }
+                            
+                        }
+                        if (tokens[3] == "left")
+                        {
+                            
+                            
+                                for (int col = currentCol; col >= 0; col--)
+                                {
+                                    if (counter > 3)
+                                    {
+                                    break;
+                                    }
+                                    if (jagged[currentRow][col] == "T")
+                                    {
+                                        opponentsTokens++;
+                                        jagged[currentRow][col] = "-";
+                                    }
+                                counter++;
+                                }
+                            
+
+                        }
+                        if (tokens[3] == "right")
+                        {
+                            
+                            
+                                for (int col = currentCol; col < jagged[currentRow].Length; col++)
+                                {
+                                    if (counter > 3)
+                                    {
+                                    break;
+                                    }
+                                    if (jagged[currentRow][col] == "T")
+                                    {
+                                        opponentsTokens++;
+                                        jagged[currentRow][col] = "-";
+                                    }
+                                counter++;
+                                }
+                            
+                        }
+                    }
+                    
+                    
+                }
+                if (tokens[0] == "Find")
+                {
+                    currentRow = int.Parse(tokens[1]);
+                    currentCol = int.Parse(tokens[2]);
+                    if (currentRow >= 0 && currentRow < jagged.Length
+                        && currentCol >= 0 && currentCol < jagged[currentRow].Length)
+                    {
+                        if (jagged[currentRow][currentCol] == "T")
+                        {
+                            collectedTokens++;
+                            jagged[currentRow][currentCol] = "-";
+                        }
+                    }
+                }
+
+                command = Console.ReadLine();
+            }
+            for (int row = 0; row < rowsCount; row++)
+            {
+                for (int col = 0; col < jagged[row].Length; col++)
+                {
+                    Console.Write($"{jagged[row][col]} ");
+                }
+
+                Console.WriteLine();
+            }
+            Console.WriteLine($"Collected tokens: {collectedTokens}");
+            Console.WriteLine($"Opponent's tokens: {opponentsTokens}");
+        }
+    }
+}
