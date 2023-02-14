@@ -1,0 +1,72 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Linq;
+using System.Text.RegularExpressions;
+
+namespace _01._Birthday_Celebration
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            List<int> guests = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                               .Select(int.Parse).ToList();
+            List<int> plates = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                               .Select(int.Parse).ToList();
+            int wastedGramsOfFood = 0;
+            List<int> reversedPlates = new List<int>();
+            for (int i = plates.Count - 1; i >= 0; i--)
+            {
+                reversedPlates.Add(plates[i]);
+            }
+
+            for (int i = 0; ;)
+            {
+                if (guests.Count == 0)
+                {
+                    break;
+                }
+                if (reversedPlates.Count == 0)
+                {
+                    break;
+                }
+                if (reversedPlates[i] < guests[i])
+                {
+                    int sum = 0;
+                    for (int j = 0; ; )
+                    {
+                        
+                        sum += reversedPlates[j];
+                        if(sum >= guests[i])
+                        {
+                            wastedGramsOfFood += sum - guests[i];
+                            reversedPlates.Remove(reversedPlates[j]);
+                            guests.Remove(guests[i]);
+                            break;
+                        }
+                        reversedPlates.Remove(reversedPlates[j]);
+                    }
+                    continue;
+                }
+                if (reversedPlates[i] >= guests[i])
+                {
+                    wastedGramsOfFood += reversedPlates[i] - guests[i];
+                    guests.Remove(guests[i]);
+                    reversedPlates.Remove(reversedPlates[i]);
+                }
+
+                
+            }
+            if (guests.Count > 0)
+            {
+                Console.WriteLine("Guests: " + String.Join(" ", guests));
+            }
+            if (reversedPlates.Count > 0)
+            {
+                Console.WriteLine("Plates: " + String.Join(" ", reversedPlates));
+            }
+            Console.WriteLine($"Wasted grams of food: {wastedGramsOfFood}");
+        }
+    }
+}
