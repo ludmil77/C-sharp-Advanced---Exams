@@ -1,0 +1,104 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Linq;
+using System.Text;
+
+namespace _01._Food_Finder
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+           List<string> vowels = Console.ReadLine()
+                                 .Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList();
+           List<string> consonants = Console.ReadLine()
+                                     .Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList();
+            string pear = "pear";
+            string flour = "flour";
+            string pork = "pork";
+            string olive = "olive";
+            List<string> foodFinder = new List<string>();
+            int initialCounter = consonants.Count;
+            int counter = 0;
+           
+            for (int i = 0; i < initialCounter; i++)
+            {
+                if (counter == initialCounter)
+                {
+                    break;
+                }
+                
+                if (pear.Length > 0 && pear.Contains(vowels[i]))
+                {
+                    int index = pear.IndexOf(vowels[i]);
+                    pear = pear.Remove(index, 1);
+                }
+                if (pear.Length > 0 && pear.Contains(consonants[consonants.Count - 1]))
+                {
+                    int index = pear.IndexOf(consonants[consonants.Count - 1]);
+                    pear = pear.Remove(index, 1);
+                }
+
+                if (flour.Length > 0 && flour.Contains(vowels[i]))
+                {
+                    int index = flour.IndexOf(vowels[i]);
+                    flour = flour.Remove(index, 1);
+                }
+                if (flour.Length > 0 && flour.Contains(consonants[consonants.Count - 1]))
+                {
+                    int index = flour.IndexOf(consonants[consonants.Count - 1]);
+                    flour = flour.Remove(index, 1);
+                }
+                if (pork.Length > 0 && pork.Contains(vowels[i]))
+                {
+                    int index = pork.IndexOf(vowels[i]);
+                    pork = pork.Remove(index, 1);
+                }
+                if (pork.Length > 0 && pork.Contains(consonants[consonants.Count - 1]))
+                {
+                    int index = pork.IndexOf(consonants[consonants.Count - 1]);
+                    pork = pork.Remove(index, 1);
+                }
+                if (olive.Length > 0 && olive.Contains(vowels[i]))
+                {
+                    int index = olive.IndexOf(vowels[i]);
+                    olive = olive.Remove(index, 1);
+                }
+                if (olive.Length > 0 && olive.Contains(consonants[consonants.Count - 1]))
+                {
+                    int index = olive.IndexOf(consonants[consonants.Count - 1]);
+                    olive = olive.Remove(index, 1);
+                }
+                string current = vowels[i].ToString();
+                vowels.Remove(vowels[i]);
+                vowels.Add(current);
+                consonants.Remove(consonants[consonants.Count - 1]);
+                i--;
+                counter++;
+                
+            }
+            if (pear.Length == 0)
+            {
+                foodFinder.Add("pear");
+            }
+            if (flour.Length == 0)
+            {
+                foodFinder.Add("flour");
+            }
+            if (pork.Length == 0)
+            {
+                foodFinder.Add("pork");
+            }
+            if (olive.Length == 0)
+            {
+                foodFinder.Add("olive");
+            }
+            Console.WriteLine($"Words found: {foodFinder.Count}");
+            foreach (var food in foodFinder)
+            {
+                Console.WriteLine(food);
+            }
+        }
+    }
+}
