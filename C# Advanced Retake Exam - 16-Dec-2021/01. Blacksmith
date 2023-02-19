@@ -1,0 +1,140 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Linq;
+using System.Text;
+
+namespace _01._Blacksmith
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            List<double> steel = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                                 .Select(double.Parse).ToList();
+            List<double> carbon = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                                 .Select(double.Parse).ToList();
+            List<double> reversedCarbon = new List<double>();
+            SortedDictionary<string, double> swords = new SortedDictionary<string, double>();
+            int counter = 0;
+            for (int i = carbon.Count - 1; i >= 0; i--)
+            {
+                reversedCarbon.Add(carbon[i]);   
+            }
+            //Sword       Resources needed
+            //Gladius     70
+           // Shamshir    80
+            //Katana      90
+            //Sabre       110
+            //Broadsword  150
+            for (int j = 0; ; )
+            {
+                if (reversedCarbon.Count == 0)
+                {
+                    break;
+                }
+                if (steel.Count == 0)
+                {
+                    break;
+                }
+                double sum = steel[j] + reversedCarbon[j];
+                if (sum == 70)
+                {
+                    if(!swords.ContainsKey("Gladius"))
+                    {
+                        swords.Add("Gladius", 0);
+                    }
+                    swords["Gladius"]++;
+                    steel.Remove(steel[j]);
+                    reversedCarbon.Remove(reversedCarbon[j]);
+                    counter++;
+                    continue;
+                }
+                if (sum == 80)
+                {
+                    if (!swords.ContainsKey("Shamshir"))
+                    {
+                        swords.Add("Shamshir", 0);
+                    }
+                    swords["Shamshir"]++;
+                    steel.Remove(steel[j]);
+                    reversedCarbon.Remove(reversedCarbon[j]);
+                    counter++;
+                    continue;
+                }
+                if (sum == 90)
+                {
+                    if (!swords.ContainsKey("Katana"))
+                    {
+                        swords.Add("Katana", 0);
+                    }
+                    swords["Katana"]++;
+                    steel.Remove(steel[j]);
+                    reversedCarbon.Remove(reversedCarbon[j]);
+                    counter++;
+                    continue;
+                }
+                if (sum == 110)
+                {
+                    if (!swords.ContainsKey("Sabre"))
+                    {
+                        swords.Add("Sabre", 0);
+                    }
+                    swords["Sabre"]++;
+                    steel.Remove(steel[j]);
+                    reversedCarbon.Remove(reversedCarbon[j]);
+                    counter++;
+                    continue;
+                }
+                if (sum == 150)
+                {
+                    if (!swords.ContainsKey("Broadsword"))
+                    {
+                        swords.Add("Broadsword", 0);
+                    }
+                    swords["Broadsword"]++;
+                    steel.Remove(steel[j]);
+                    reversedCarbon.Remove(reversedCarbon[j]);
+                    counter++;
+                    continue;
+                }
+                else
+                {
+                    steel.Remove(steel[j]);
+                    double currentCarbon = reversedCarbon[j] + 5;
+                    reversedCarbon.Remove(reversedCarbon[j]);
+                    reversedCarbon.Insert(0, currentCarbon);
+
+                }
+            }
+            if (swords.Count > 0)
+            {
+                Console.WriteLine($"You have forged {counter} swords.");
+            }
+            if (swords.Count == 0)
+            {
+                Console.WriteLine($"You did not have enough resources to forge a sword.");
+            }
+            if (steel.Count == 0)
+            {
+                Console.WriteLine("Steel left: none");
+            }
+            if (steel.Count > 0)
+            {
+                Console.WriteLine($"Steel left: " + String.Join(", ", steel));
+            }
+            if (reversedCarbon.Count == 0)
+            {
+                Console.WriteLine("Carbon left: none");
+            }
+            if (reversedCarbon.Count > 0)
+            {
+                Console.WriteLine($"Carbon left: " + String.Join(", ", reversedCarbon));
+            }
+            foreach(var sword in swords)
+            {
+                Console.WriteLine($"{sword.Key}: {sword.Value}");
+            }
+        }
+    }
+}
