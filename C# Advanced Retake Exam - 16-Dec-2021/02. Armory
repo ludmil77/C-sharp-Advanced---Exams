@@ -1,0 +1,164 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace _02._Armory
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int size = int.Parse(Console.ReadLine());
+            int currentRow = 0;
+            int currentCol = 0;
+            char[,] matrix = new char[size, size];
+            List<int> coordM = new List<int>();
+            int sumGold = 0;
+            bool isCellValid = false;
+            bool isSumMoreThan65 = false;
+            for (int row = 0; row < size; row++)
+            {
+                char[] chars = Console.ReadLine().Replace(" ", "").ToCharArray();
+
+                for (int col = 0; col < size; col++)
+                {
+                    if (chars[col] == 'A')
+                    {
+                        currentRow = row;
+                        currentCol = col; 
+                    }
+                    if (chars[col] == 'M')
+                    {
+                        coordM.Add(row);
+                        coordM.Add(col);
+                    }
+                    matrix[row, col] = chars[col];
+                }
+            }
+            string command = Console.ReadLine();
+            while (true)
+            {
+                
+                if (command == "up")
+                {
+                    if (currentRow - 1 >= 0)
+                    {
+                        matrix[currentRow, currentCol] = '-';
+                        currentRow--;
+                    }
+                    else
+                    {
+                        isCellValid = true;
+                        break;
+                    }
+                }
+                if (command == "down")
+                {
+                    if (currentRow + 1 < size)
+                    {
+                        matrix[currentRow, currentCol] = '-';
+                        currentRow++;
+                    }
+                    else
+                    {
+                        isCellValid = true;
+                        break;
+                    }
+                }
+                if (command == "left")
+                {
+                    if (currentCol - 1 >= 0)
+                    {
+                        matrix[currentRow, currentCol] = '-';
+                        currentCol--;
+                    }
+                    else
+                    {
+                        isCellValid = true;
+                        break;
+                    }
+                }
+                if (command == "right")
+                {
+                    if (currentCol + 1 < size)
+                    {
+                        matrix[currentRow, currentCol] = '-';
+                        currentCol++;
+                    }
+                    else
+                    {
+                        isCellValid = true;
+                        break;
+                    }
+                }
+                if (matrix[currentRow, currentCol] == 'M')
+                {
+                    if (currentRow == coordM[0] && currentCol == coordM[1])
+                    {
+                        currentRow = coordM[2];
+                        currentCol = coordM[3];
+                        matrix[coordM[0], coordM[1]] = '-';
+                        matrix[coordM[2], coordM[3]] = '-';
+                    }
+                    else if (currentRow == coordM[2] && currentCol == coordM[3])
+                    {
+                        currentRow = coordM[0];
+                        currentCol = coordM[1];
+                        matrix[coordM[2], coordM[3]] = '-';
+                        matrix[coordM[0], coordM[1]] = '-';
+                    }
+                }
+                if (char.IsDigit(matrix[currentRow, currentCol]))
+                {
+                    sumGold += int.Parse(matrix[currentRow, currentCol].ToString());
+                    if (sumGold > 65)
+                    {
+                        isSumMoreThan65 = true;
+                        break;
+                    }
+                }
+                matrix[currentRow, currentCol] = '-';
+                command = Console.ReadLine();
+            }
+            if(isCellValid)
+            {
+                Console.WriteLine("I do not need more swords!");
+                Console.WriteLine($"The king paid {sumGold} gold coins.");
+
+                for (int row = 0; row < size; row++)
+                {
+                    for (int col = 0; col < size; col++)
+                    {
+                        matrix[currentRow, currentCol] = '-';
+                        Console.Write(matrix[row, col]);
+                    }
+                    Console.WriteLine();
+                }
+
+            }
+            if (isSumMoreThan65)
+            {
+                Console.WriteLine("Very nice swords, I will come back for more!");
+                Console.WriteLine($"The king paid {sumGold} gold coins.");
+
+                for (int row = 0; row < size; row++)
+                {
+                    for (int col = 0; col < size; col++)
+                    {
+                        if (row == currentRow && col == currentCol)
+                        {
+                            matrix[row, col] = 'A';
+                        }
+                        Console.Write(matrix[row, col]);
+                    }
+                    Console.WriteLine();
+                }
+
+            }
+
+           
+
+
+        }
+    }
+}
