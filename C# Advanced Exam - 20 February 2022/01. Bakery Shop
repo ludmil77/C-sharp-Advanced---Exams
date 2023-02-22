@@ -1,0 +1,119 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Linq;
+using System.Text;
+using System.Reflection.Emit;
+
+namespace _01._Bakery_Shop
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            List<double> water = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                                 .Select(double.Parse).ToList();
+                                 
+            List<double> flour = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                                 .Select(double.Parse).ToList();
+            List<double> revFlour = new List<double>();
+            Dictionary<string, double> products = new Dictionary<string, double>();
+            for (int i = flour.Count - 1; i >= 0; i--)
+            {
+                revFlour.Add(flour[i]);  
+            }
+            //Croissant – consists of 50 % water and 50 % flour
+            //Muffin – consists of 40 % water and 60 % flour
+            //Baguette – consists of 30 % water and 70 % flour
+            //Bagel – consists of 20 % water and 80 % flour
+            for (int i = 0; ;)
+            {
+                if (water.Count == 0)
+                {
+                    break;
+                }
+                if (revFlour.Count == 0)
+                {
+                    break ;
+                }
+                double result = water[i] * 100/ (water[i] + revFlour[i]);
+                if (result == 50)
+                {
+                    if (!products.ContainsKey("Croissant"))
+                    {
+                        products.Add("Croissant", 0);
+                    }
+                    products["Croissant"]++;
+                    water.Remove(water[i]);
+                    revFlour.Remove(revFlour[i]);
+                }
+                else if (result == 40)
+                {
+                    if (!products.ContainsKey("Muffin"))
+                    {
+                        products.Add("Muffin", 0);
+                    }
+                    products["Muffin"]++;
+                    water.Remove(water[i]);
+                    revFlour.Remove(revFlour[i]);
+                }
+                else if (result == 30)
+                {
+                    if (!products.ContainsKey("Baguette"))
+                    {
+                        products.Add("Baguette", 0);
+                    }
+                    products["Baguette"]++;
+                    water.Remove(water[i]);
+                    revFlour.Remove(revFlour[i]);
+                }
+                else if (result == 20)
+                {
+                    if (!products.ContainsKey("Bagel"))
+                    {
+                        products.Add("Bagel", 0);
+                    }
+                    products["Bagel"]++;
+                    water.Remove(water[i]);
+                    revFlour.Remove(revFlour[i]);
+                }
+                else
+                {
+                    if (revFlour[i] > water[i])
+                    {
+                        double newFlour = revFlour[i] - water[i];
+                        revFlour.Remove(revFlour[i]);
+                        revFlour.Insert(0, newFlour);
+                        water.Remove(water[i]);
+                        if (!products.ContainsKey("Croissant"))
+                        {
+                            products.Add("Croissant", 0);
+                        }
+                        products["Croissant"]++;
+                    }
+                }
+            }
+            foreach (var product in products.Where(x => x.Value > 0).OrderByDescending(x => x.Value).ThenBy(x => x.Key))
+            {
+               
+                Console.WriteLine($"{product.Key}: {product.Value}");
+            }
+            if (water.Count == 0)
+            {
+                Console.WriteLine("Water left: None");
+            }
+            if (water.Count > 0)
+            {
+                Console.WriteLine("Water left: " + String.Join(", ", water));
+            }
+            if (revFlour.Count == 0)
+            {
+                Console.WriteLine("Flour left: None");
+            }
+            if (revFlour.Count > 0)
+            {
+                Console.WriteLine("Flour left: " + String.Join(", ", revFlour));
+            }
+        }
+    }
+}
