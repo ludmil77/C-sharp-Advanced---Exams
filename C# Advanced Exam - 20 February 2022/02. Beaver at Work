@@ -1,0 +1,233 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Linq;
+using System.Text;
+
+namespace _02._Beaver_at_Work
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int size = int.Parse(Console.ReadLine());
+            char[,] matrix = new char[size, size];
+            List<int> collectedBranches = new List<int>();
+            List<char> lowers = new List<char>();   
+            List<char> lowersInitial = new List<char>();   
+            int currentRow = 0;
+            int currentCol = 0;
+            int branchRow = 0;
+            int branchCol = 0;
+            int counter = 0;
+            for (int row = 0; row < size; row++)
+            {
+                char[] chars = Console.ReadLine().Replace(" ", "").ToCharArray(); 
+
+                for (int col = 0; col < size; col++)
+                {
+                   if (chars[col] == 'B')
+                    {
+                        currentRow = row;
+                        currentCol = col;
+                       
+                    }
+                   if (char.IsLower(chars[col]))
+                    {
+                        lowersInitial.Add(chars[col]);
+                    }
+
+                    matrix[row, col] = chars[col];
+                }
+            }
+            string command = Console.ReadLine();
+             while(true)
+            {
+                if (command == "end")
+                {
+                    break;
+                }
+                matrix[currentRow, currentCol] = '-';
+                if (command == "up")
+                {
+                    if (currentRow == 0)
+                    {
+                        if (collectedBranches.Count > 0)
+                        {
+                            branchRow = collectedBranches[collectedBranches.Count - 2];
+                            branchCol = collectedBranches[collectedBranches.Count - 1];
+                            collectedBranches.RemoveAt(collectedBranches.Count - 1);
+                            collectedBranches.RemoveAt(collectedBranches.Count - 1);
+                            matrix[branchRow, branchCol] = '-';
+                            lowers.RemoveAt(lowers.Count - 1);
+                            
+                            command = Console.ReadLine();
+                            continue;
+                        }
+                        
+                    }
+                    else
+                    {
+                        currentRow--;
+                        if (matrix[currentRow, currentCol] == 'F')
+                        {
+                            if (currentRow == 0)
+                            {
+                                currentRow = size - 1;
+                                matrix[0, currentCol] = '-';
+                            }
+                            else
+                            {
+                                currentRow = 0;
+                            }
+                            command = Console.ReadLine();
+                            continue;
+                        }
+                    }
+                }
+                if (command == "down")
+                {
+                    if (currentRow == size - 1)
+                    {
+                        if (collectedBranches.Count > 0)
+                        {
+                            branchRow = collectedBranches[collectedBranches.Count - 2];
+                            branchCol = collectedBranches[collectedBranches.Count - 1];
+                            collectedBranches.RemoveAt(collectedBranches.Count - 1);
+                            collectedBranches.RemoveAt(collectedBranches.Count - 1);
+                            matrix[branchRow, branchCol] = '-';
+                            lowers.RemoveAt(lowers.Count - 1);
+                            
+                            command = Console.ReadLine();
+                            continue;
+                        }
+
+                    }
+                    else
+                    {
+                        currentRow++;
+                        if (matrix[currentRow, currentCol] == 'F')
+                        {
+                            if (currentRow == size - 1)
+                            {
+                                currentRow = 0;
+                                matrix[size - 1, currentCol] = '-';
+                            }
+                            else
+                            {
+                                currentRow = size - 1;
+                            }
+                            command = Console.ReadLine();
+                            continue;
+                        }
+                    }
+                }
+                if (command == "left")
+                {
+                    if (currentCol == 0)
+                    {
+                        if (collectedBranches.Count > 0)
+                        {
+                            branchRow = collectedBranches[collectedBranches.Count - 2];
+                            branchCol = collectedBranches[collectedBranches.Count - 1];
+                            collectedBranches.RemoveAt(collectedBranches.Count - 1);
+                            collectedBranches.RemoveAt(collectedBranches.Count - 1);
+                            matrix[branchRow, branchCol] = '-';
+                            lowers.RemoveAt(lowers.Count - 1);
+                            
+                            command = Console.ReadLine();
+                            continue;
+                        }
+
+                    }
+                    else
+                    {
+                        currentCol--;
+                        if (matrix[currentRow, currentCol] == 'F')
+                        {
+                            if (currentCol == 0)
+                            {
+                                currentCol = size - 1;
+                                matrix[currentRow, 0] = '-';
+                            }
+                            else
+                            {
+                                currentCol = 0;
+                            }
+                            command = Console.ReadLine();
+                            continue;
+                        }
+                    }
+                }
+                if (command == "right")
+                {
+                    if (currentCol == size - 1)
+                    {
+                        if (collectedBranches.Count > 0)
+                        {
+                            branchRow = collectedBranches[collectedBranches.Count - 2];
+                            branchCol = collectedBranches[collectedBranches.Count - 1];
+                            collectedBranches.RemoveAt(collectedBranches.Count - 1);
+                            collectedBranches.RemoveAt(collectedBranches.Count - 1);
+                            matrix[branchRow, branchCol] = '-';
+                            lowers.RemoveAt(lowers.Count - 1);
+                            
+                            command = Console.ReadLine();
+                            continue;
+                        }
+
+                    }
+                    else
+                    {
+                        currentCol++;
+                        if (matrix[currentRow, currentCol] == 'F')
+                        {
+                            if (currentCol == size - 1)
+                            {
+                                currentCol = 0;
+                                matrix[currentRow, size - 1] = '-';
+                            }
+                            else
+                            {
+                                currentCol = size - 1;
+                            }
+                            command = Console.ReadLine();
+                            continue;
+                        }
+                    }
+                }
+                if (char.IsLower(matrix[currentRow, currentCol]))
+                {
+                    collectedBranches.Add(currentRow);
+                    collectedBranches.Add(currentCol);
+                    lowers.Add(matrix[currentRow, currentCol]);
+                    counter++;
+                }
+                matrix[currentRow, currentCol] = '-';
+                    command = Console.ReadLine();
+            }
+             if (lowersInitial.Count - counter == 0)
+            {
+                Console.WriteLine($"The Beaver successfully collect {lowers.Count} wood branches: "+
+                    String.Join(", ", lowers) + ".");
+            }
+             if (lowersInitial.Count - counter > 0)
+            {
+                Console.WriteLine($"The Beaver failed to collect every wood branch. There are {lowersInitial.Count - counter} branches left.");
+            }
+             for (int row = 0; row < size; row++)
+            {
+                for (int col = 0; col < size; col++)
+                {
+                    if (row == currentRow && col == currentCol)
+                    {
+                        matrix[row, col] = 'B';
+                    }
+                    Console.Write(matrix[row, col] + " ");
+                }
+                Console.WriteLine();
+            }
+        }
+        
+    }
+}
