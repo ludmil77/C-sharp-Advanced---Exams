@@ -1,0 +1,161 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Linq;
+using System.Text;
+using System.IO;
+using System.Collections;
+
+namespace _01._Meal_Plan
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            List<string> meals = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList();
+            List<int> dayCalories = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                                 .Select(int.Parse).ToList();
+            List<int> reversedDay = new List<int>();
+            int toSubtract = 0;
+            int counter = meals.Count;
+            for (int i = dayCalories.Count - 1; i >= 0; i--)
+            {
+                reversedDay.Add(dayCalories[i]);
+            }
+            // salad 350,  soup 490,  pasta 680, steak 790
+             for (int i = 0; i < reversedDay.Count; i++)
+            {
+                if (reversedDay[i] < 0 && reversedDay.Count > 1)
+                {
+                    toSubtract = -reversedDay[i];
+                    reversedDay[i + 1] -= toSubtract;
+                    reversedDay.Remove(reversedDay[i]);
+                    i--;
+                    continue;
+                }
+                if (reversedDay[i] < 0 && reversedDay.Count == 1)
+                {
+                    
+                    reversedDay.Remove(reversedDay[i]);
+
+                    break; 
+                }
+                if (meals.Count == 0)
+                {
+                    break;
+                }
+                if (reversedDay.Count == 0)
+                {
+                    break;
+                }
+                reversedDay[i] -= toSubtract;
+                 toSubtract = 0;
+                for (int j = 0; j < meals.Count; j++)
+                {
+
+                    if (reversedDay[i] < 0)
+                    {
+                        if (reversedDay.Count == 1)
+                        {
+                            reversedDay.Remove(reversedDay[i]);
+                            break;
+                        }
+                        else
+                        {
+                            toSubtract = -reversedDay[i];
+                            reversedDay.Remove(reversedDay[i]);
+                            i--;
+                            break;
+                        }
+
+                    }
+                    if (meals.Count == 0)
+                    {
+                        break;
+                    }
+
+                    if (meals[j] == "salad")
+                    {
+                        reversedDay[i] -= 350;
+
+                        meals.Remove(meals[j]);
+                        if (meals.Count == 0)
+                        {
+                            i--;
+                            break;
+                        }
+                        else
+                        {
+                            j--;
+                            continue;
+                        }
+                        
+
+                    }
+                    if (meals[j] == "soup" )
+                    {
+                        reversedDay[i] -= 490;
+                        meals.Remove(meals[j]);
+                        if (meals.Count == 0)
+                        {
+                            i--;
+                            break;
+                        }
+                        else
+                        {
+                            j--;
+                            continue;
+                        }
+                    }
+                    if (meals[j] == "pasta")
+                    {
+                        reversedDay[i] -= 680;
+                        meals.Remove(meals[j]);
+                        if (meals.Count == 0)
+                        {
+                            i--;
+                            break;
+                        }
+                        else
+                        {
+                            j--;
+                            continue;
+                        }
+                    }
+                    if (meals[j] == "steak")
+                    {
+                        reversedDay[i] -= 790;
+                        meals.Remove(meals[j]);
+                        if (meals.Count == 0)
+                        {
+                            i--;
+                            break;
+                        }
+                        else
+                        {
+                            j--;
+                            continue;
+                        }
+                    }
+                   
+
+                }
+            }
+             if (meals.Count == 0 && reversedDay.Count > 0)
+            {
+                Console.WriteLine($"John had {counter} meals.");
+                Console.WriteLine($"For the next few days, he can eat " + String.Join(", ", reversedDay) + $" calories.");
+            }
+             if (meals.Count == 0 && reversedDay.Count == 0)
+            {
+                Console.WriteLine($"John had {counter} meals.");
+            }
+             if (meals.Count > 0)
+            {
+                Console.WriteLine($"John ate enough, he had {counter - meals.Count} meals.");
+                Console.WriteLine($"Meals left: " + String.Join(", ", meals)+ $".");
+            }
+        }
+        
+    }
+}
