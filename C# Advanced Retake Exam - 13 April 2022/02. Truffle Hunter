@@ -1,0 +1,121 @@
+using System;
+using System.Linq;
+
+namespace _02._Truffle_Hunter
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int size = int.Parse(Console.ReadLine());
+            int collectB = 0;
+            int collectS = 0;
+            int collectW = 0;
+            int Wild_Boar_Counter = 0;
+           
+            string[,] matrix = new string[size, size];
+
+            for (int row = 0; row < size; row++)
+            {
+                string[] chars = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries).ToArray();
+
+                for (int col = 0; col < size; col++)
+                {
+                    matrix[row, col] = chars[col];
+                }
+            }
+            string command = Console.ReadLine();    
+            while(command != "Stop the hunt")
+            {
+
+                string[] commands = command.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries).ToArray();
+                if (commands[0] == "Collect")
+                {
+                    int row = int.Parse(commands[1].Trim());
+                    int col = int.Parse(commands[2].Trim());
+                    
+                    if (matrix[row, col] == "B")
+                    {
+                        collectB++;
+                        
+                    }
+                    else if (matrix[row, col] == "S")
+                    {
+                        collectS++;
+                        
+                    }
+                    else if (matrix[row, col] == "W")
+                    {
+                        collectW++;
+                        
+                    }
+                    matrix[row, col] = "-";
+                }
+                else if (commands[0] == "Wild_Boar")
+                {
+                    int row = int.Parse(commands[1]);
+                    int col = int.Parse(commands[2]);
+                    if (commands[3] == "up")
+                    {
+                        for (int i = row; i >= 0; i -= 2)
+                        {
+                            if (matrix[i, col] == "B" || matrix[i, col] == "S" || matrix[i, col] == "W")
+                            {
+                                Wild_Boar_Counter++;
+                                matrix[i, col] = "-";
+                            }
+                        }
+                    }
+                    else if (commands[3] == "down")
+                    {
+                        for (int i = row; i < size; i += 2)
+                        {
+                            if (matrix[i, col] == "B" || matrix[i, col] == "S" || matrix[i, col] == "W")
+                            {
+                                Wild_Boar_Counter++;
+                                matrix[i, col] = "-";
+                            }
+                        }
+                    }
+                    else if (commands[3] == "left")
+                    {
+                        for (int i = col; i >= 0; i -= 2)
+                        {
+                            if (matrix[row, i] == "B" || matrix[row, i] == "S" || matrix[row, i] == "W")
+                            {
+                                Wild_Boar_Counter++;
+                                matrix[row, i] = "-";
+                            }
+                        }
+                    }
+                    else if (commands[3] == "right")
+                    {
+                        for (int i = col; i < size; i += 2)
+                        {
+                            if (matrix[row, i] == "B" || matrix[row, i] == "S" || matrix[row, i] == "W")
+                            {
+                                Wild_Boar_Counter++;
+                                matrix[row, i] = "-";
+                            }
+                        }
+                    }
+
+                }
+                command = Console.ReadLine();
+            }
+            Console.WriteLine($"Peter manages to harvest {collectB} black," +
+                $" {collectS} summer, " +
+                $"and {collectW} white truffles.");
+            Console.WriteLine($"The wild boar has eaten {Wild_Boar_Counter} truffles.");
+            for (int row = 0; row < size; row++)
+            {
+                for (int col = 0; col < size; col++)
+                {
+                    Console.Write(matrix[row, col] + " ");
+                }
+                Console.WriteLine();
+            }
+        }
+
+    }
+}
