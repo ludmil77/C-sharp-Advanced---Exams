@@ -1,0 +1,153 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Linq;
+
+namespace _01._Tiles_Master
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            List<int> whiteTiles = Console.ReadLine()
+                .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                .Select(int.Parse)
+                .ToList();
+            List<int> greyTiles = Console.ReadLine()
+                .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                .Select(int.Parse)
+                .ToList();
+            List<int> reversedWhite = new List<int>();
+            for (int i = whiteTiles.Count - 1; i >= 0; i--)
+            {
+                reversedWhite.Add(whiteTiles[i]);
+            }
+            Dictionary<string, int> totalAmount = new Dictionary<string, int>();
+            int counterSink = 0;
+            int counterOven = 0;
+            int counterTop = 0;
+            int counterWall = 0;
+            int counterFloor = 0;
+
+
+            for (int i = 0; ;)
+            {
+                int sum = 0;
+
+
+                if (reversedWhite.Count == 0)
+                {
+                    break;
+                }
+                if (greyTiles.Count == 0)
+                {
+                    break;
+                }
+                sum = reversedWhite[i] + greyTiles[i];
+                if (reversedWhite[i] == greyTiles[i])
+                {
+                    if (sum == 40)
+                    {
+                        counterSink++;
+                        string Sink = "Sink";
+                        if (!totalAmount.ContainsKey(Sink))
+                        {
+                            totalAmount.Add(Sink, 0);
+                        }
+
+                        totalAmount[Sink]++;
+
+                    }
+                    else if (sum == 50)
+                    {
+                        counterOven++;
+                        string Oven = "Oven";
+                        if (!totalAmount.ContainsKey(Oven))
+                        {
+                            totalAmount.Add(Oven, 0);
+                        }
+
+                        totalAmount[Oven]++;
+
+                    }
+                    else if (sum == 60)
+                    {
+                        counterTop++;
+                        string Countertop = "Countertop";
+                        if (!totalAmount.ContainsKey(Countertop))
+                        {
+                            totalAmount.Add(Countertop, 0);
+                        }
+
+                        totalAmount[Countertop]++;
+
+                    }
+                    else if (sum == 70)
+                    {
+                        counterWall++;
+                        string Wall = "Wall";
+                        if (!totalAmount.ContainsKey(Wall))
+                        {
+                            totalAmount.Add(Wall, 0);
+                        }
+
+                        totalAmount[Wall]++;
+
+                    }
+
+                    else
+                    {
+                        counterFloor++;
+                        string Floor = "Floor";
+                        if (!totalAmount.ContainsKey(Floor))
+                        {
+                            totalAmount.Add(Floor, 0);
+                        }
+
+                        totalAmount[Floor]++;
+
+                    }
+
+                    reversedWhite.Remove(reversedWhite[i]);
+                    greyTiles.Remove(greyTiles[i]);
+
+                }
+                else
+                {
+                    int newWhiteTiles = reversedWhite[i] / 2;
+                    reversedWhite.Remove(reversedWhite[i]);
+                    reversedWhite.Insert(0, newWhiteTiles);
+                    int newGreyTiles = greyTiles[i];
+                    greyTiles.Remove(greyTiles[i]);
+                    greyTiles.Add(newGreyTiles);
+
+                }
+
+            }
+            if (reversedWhite.Count == 0)
+            {
+                Console.WriteLine($"White tiles left: none");
+            }
+            if (reversedWhite.Count > 0)
+            {
+                Console.WriteLine($"White tiles left: " + String.Join(", ", reversedWhite));
+
+            }
+
+            if (greyTiles.Count == 0)
+            {
+                Console.WriteLine($"Grey tiles left: none");
+            }
+            if (greyTiles.Count > 0)
+            {
+                Console.WriteLine($"Grey tiles left: " + String.Join(", ", greyTiles));
+
+            }
+            foreach (var a in totalAmount.OrderByDescending(x => x.Value).ThenBy(x => x.Key))
+            {
+                Console.WriteLine($"{a.Key}: {a.Value}");
+            }
+
+        }
+    }
+}
