@@ -1,0 +1,181 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Linq;
+using System.Text.RegularExpressions;
+
+namespace _01._Barista_Contest
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            List<int> coffee = Console.ReadLine().Split(", ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();  
+            List<int> milk = Console.ReadLine().Split(", ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();  
+            Dictionary<string, int> items = new Dictionary<string, int>();
+            List<int> reversedMilk = new List<int>();
+            for (int i = milk.Count - 1; i >= 0; i--)
+            {
+                reversedMilk.Add(milk[i]);
+            }
+            bool isCoffeeMilk = false;
+            bool isCoffee = false;
+            bool isMilk = false;
+            
+            
+            for (int i = 0; ; i++)
+            {
+
+                if (coffee.Count == 0 && reversedMilk.Count == 0)
+                {
+                    isCoffeeMilk = true;
+                    break;
+                }
+                if (coffee.Count == 0)
+                {
+                    isCoffee = true;
+                    break;
+                }
+                if (reversedMilk.Count == 0)
+                {
+                    isMilk = true;
+                    break;
+                }
+
+                double coffeeMilk = coffee[i] + reversedMilk[i];
+                if (coffeeMilk == 50)
+                {
+                    if (!items.ContainsKey("Cortado"))
+                    {
+                        items.Add("Cortado", 1);
+                    }
+                    else
+                    {
+                        items["Cortado"]++;
+                    }
+                    
+                    coffee.Remove(coffee[i]);
+                    reversedMilk.Remove(reversedMilk[i]);
+                    i--;
+                }
+                if (coffeeMilk == 75)
+                {
+                    if (!items.ContainsKey("Espresso"))
+                    {
+                        items.Add("Espresso", 1);
+                    }
+                    else
+                    {
+                        items["Espresso"]++;
+                    }
+                   
+                    coffee.Remove(coffee[i]);
+                    reversedMilk.Remove(reversedMilk[i]);
+                    i--;
+                }
+                if (coffeeMilk == 100)
+                {
+                    if (!items.ContainsKey("Capuccino"))
+                    {
+                        items.Add("Capuccino", 1);
+                    }
+                    else
+                    {
+                        items["Capuccino"]++;
+                    }
+                   
+                    coffee.Remove(coffee[i]);
+                    reversedMilk.Remove(reversedMilk[i]);
+                    i--;
+                }
+                if (coffeeMilk == 150)
+                {
+                    if (!items.ContainsKey("Americano"))
+                    {
+                        items.Add("Americano", 1);
+                    }
+                    else
+                    {
+                        items["Americano"]++;
+                    }
+                    
+                    coffee.Remove(coffee[i]);
+                    reversedMilk.Remove(reversedMilk[i]);
+                    i--;
+                }
+                if (coffeeMilk == 200)
+                {
+                    if (!items.ContainsKey("Latte"))
+                    {
+                        items.Add("Latte", 1);
+                    }
+                    else
+                    {
+                        items["Latte"]++;
+                    }
+                   
+                    coffee.Remove(coffee[i]);
+                    reversedMilk.Remove(reversedMilk[i]);
+                    i--;
+                }
+               if (coffeeMilk != 50 && coffeeMilk != 75 && coffeeMilk != 100
+                    && coffeeMilk != 150 && coffeeMilk != 200)
+                {
+                  
+                    coffee.Remove(coffee[i]);
+                    reversedMilk[i] -= 5;
+                    i--;
+                }
+               
+            }
+            
+            if (isCoffeeMilk)
+            {
+                Console.WriteLine("Nina is going to win! She used all the coffee and milk!");
+                Console.WriteLine("Coffee left: none");
+                Console.WriteLine("Milk left: none");
+                foreach (var item in items.OrderBy(x => x.Value).ThenByDescending(x => x.Key))
+                {
+                    if (item.Value > 0)
+                    {
+                        Console.WriteLine($"{item.Key}: {item.Value}");
+                    }
+
+                }
+            }
+            if (isCoffee)
+            {
+                Console.WriteLine("Nina needs to exercise more! She didn't use all the coffee and milk!");
+                Console.WriteLine("Coffee left: none");
+                
+                Console.Write("Milk left: ");
+                Console.Write(String.Join(", ", reversedMilk));
+                Console.WriteLine();
+                foreach (var item in items.OrderBy(x => x.Value).ThenByDescending(x => x.Key))
+                {
+                    if (item.Value > 0)
+                    {
+                        Console.WriteLine($"{item.Key}: {item.Value}");
+                    }
+                }
+            }
+            if (isMilk)
+            {
+                Console.WriteLine("Nina needs to exercise more! She didn't use all the coffee and milk!");
+                   
+                Console.Write("Coffee left: ");
+                Console.Write(String.Join(", ", coffee));
+                Console.WriteLine();
+                Console.WriteLine("Milk left: none");
+
+                foreach (var item in items.OrderBy(x => x.Value).ThenByDescending(x => x.Key))
+                {
+                    if (item.Value > 0)
+                    {
+                        Console.WriteLine($"{item.Key}: {item.Value}");
+                    }
+                }
+            }
+        }
+    }
+}
