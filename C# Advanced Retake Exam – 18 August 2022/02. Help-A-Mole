@@ -1,0 +1,179 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Linq;
+using System.Text;
+
+namespace _02._Help_A_Mole
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int n = int.Parse(Console.ReadLine());
+            char[,] matrix = new char[n, n];
+            int currentRow = 0;
+            int currentCol = 0;
+            int totalPoints = 0;
+            int oldRow = 0;
+            int oldCol = 0;
+            List<int> special = new List<int>();
+            for (int row = 0; row < n; row++)
+            {
+                string line = Console.ReadLine();
+                {
+                    for (int col = 0; col < n; col++)
+                    {
+                        matrix[row, col] = line[col];
+                        if (matrix[row, col] == 'M')
+                        {
+                            currentRow = row;
+                            currentCol = col;
+                        }
+                        if (matrix[row, col] == 'S')
+                        {
+                            special.Add(row);
+                            special.Add(col);
+                        }
+                    }
+                }
+            }
+            string command = Console.ReadLine();
+            while (command != "End")
+            {
+                matrix[currentRow, currentCol] = '-';
+                if (command == "up")
+                {
+
+                    if (currentRow - 1 >= 0)
+                    {
+                        currentRow = currentRow - 1;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Don't try to escape the playing field!");
+                        command = Console.ReadLine();
+                        continue;
+                    }
+
+                }
+                else if (command == "down")
+                {
+                    if (currentRow + 1 < n)
+                    {
+                        currentRow = currentRow + 1;
+                        
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("Don't try to escape the playing field!");
+                        command = Console.ReadLine();
+                        continue;
+                    }
+
+                }
+                else if (command == "left")
+                {
+                    if (currentCol - 1 >= 0)
+                    {
+                        currentCol = currentCol - 1;
+                        
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("Don't try to escape the playing field!");
+                        command = Console.ReadLine();
+                        continue;
+                    }
+
+                }
+                else if (command == "right")
+                {
+                    if (currentCol + 1 < n)
+                    {
+                        currentCol = currentCol + 1;
+                        
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("Don't try to escape the playing field!");
+                        command = Console.ReadLine();
+                        continue;
+                    }
+
+                }
+                if (char.IsDigit(matrix[currentRow, currentCol]))
+                {
+                    totalPoints += int.Parse(matrix[currentRow, currentCol].ToString());
+                    matrix[currentRow, currentCol] = '-';
+
+
+
+                    if (totalPoints >= 25)
+                    {
+                        break;
+                    }
+                    command = Console.ReadLine();
+                    continue;
+                }
+                else if (matrix[currentRow, currentCol] == 'S')
+                {
+                    if (currentRow == special[0] && currentCol == special[1])
+                    {
+                        matrix[currentRow, currentCol] = '-';
+
+                        currentRow = special[2];
+                        currentCol = special[3];
+
+                        totalPoints -= 3;
+                    }
+                    else if (currentRow == special[2] && currentCol == special[3])
+                    {
+                        matrix[currentRow, currentCol] = '-';
+                        currentRow = special[0];
+                        currentCol = special[1];
+
+                        totalPoints -= 3;
+                    }
+                    command = Console.ReadLine();
+                    continue;
+
+                }
+                else if (matrix[currentRow, currentCol] == '-')
+                {
+                    matrix[currentRow, currentCol] = '-';
+
+
+
+                }
+                command = Console.ReadLine();
+            }
+            if (totalPoints >= 25)
+            {
+                Console.WriteLine("Yay! The Mole survived another game!");
+                Console.WriteLine($"The Mole managed to survive with a total of {totalPoints} points.");
+            }
+            if (totalPoints < 25)
+            {
+                Console.WriteLine("Too bad! The Mole lost this battle!");
+                Console.WriteLine($"The Mole lost the game with a total of {totalPoints} points.");
+            }
+            for (int row = 0; row < n; row++)
+            {
+                for (int col = 0; col < n; col++)
+                {
+                    if (row == currentRow && col == currentCol)
+                    {
+                        matrix[row, col] = 'M';
+                    }
+                    Console.Write(matrix[row, col]);
+                }
+
+                Console.WriteLine();
+            }
+        }
+    }
+}
