@@ -1,0 +1,102 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Linq;
+using System.Text;
+
+namespace _01._Energy_Drinks
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            List<int> caffeinе = Console.ReadLine()
+                .Split(", ",StringSplitOptions.RemoveEmptyEntries)
+                .Select(int.Parse).ToList();
+            List<int> drinks = Console.ReadLine()
+                .Split(", ",StringSplitOptions.RemoveEmptyEntries)
+                .Select(int.Parse).ToList();
+           
+             if (drinks.Count == 0)
+            {
+                return;
+            }
+             if (caffeinе.Count == 0)
+            {
+                return;
+            }
+            List<int> reversedCaff = new List<int>();
+            int sumCaffeine = 0;
+            for (int i = caffeinе.Count - 1; i >= 0; i--)
+            {
+                reversedCaff.Add(caffeinе[i]);
+            }
+           for (int i = 0; ; )
+            {
+                if (reversedCaff.Count == 0)
+                {
+                    break;
+                }
+                if (drinks.Count == 0)
+                {
+                    break;
+                }
+
+                if (reversedCaff[i] * drinks[i] <= 300)
+                {
+                    if (sumCaffeine + (reversedCaff[i] * drinks[i]) <= 300)
+                    {
+                        sumCaffeine += reversedCaff[i] * drinks[i];
+                        reversedCaff.Remove(reversedCaff[i]);
+                        drinks.Remove(drinks[i]);
+                        
+                        continue;
+                    }
+                    else
+                    {
+                        sumCaffeine -= 30;
+                        int currentDrink = drinks[i];
+                        reversedCaff.Remove(reversedCaff[i]);
+                        drinks.Remove(drinks[i]);
+                        drinks.Add(currentDrink);
+                        if (sumCaffeine < 0)
+                        {
+                            sumCaffeine = 0; 
+                        }
+                        
+                        continue;
+                    }
+                   
+                }
+                if (reversedCaff[i] * drinks[i] > 300)
+                {
+                    sumCaffeine -= 30;
+                    int currentDrink = drinks[i];
+                    reversedCaff.Remove(reversedCaff[i]);
+                    drinks.Remove(drinks[i]);
+                    drinks.Add(currentDrink);
+                    if (sumCaffeine < 0)
+                    {
+                        sumCaffeine = 0; 
+                    }
+                }
+                
+                
+            }
+           if (drinks.Count > 0)
+            {
+                Console.Write("Drinks left: ");
+                Console.Write(String.Join(", ", drinks));
+                Console.WriteLine();
+            }
+           if (drinks.Count == 0)
+            {
+                Console.WriteLine($"At least Stamat wasn't exceeding the maximum caffeine.");
+            }
+           if (sumCaffeine >= 0)
+            {
+                Console.WriteLine($"Stamat is going to sleep with {sumCaffeine} mg caffeine.");
+            }
+        }
+    }
+}
