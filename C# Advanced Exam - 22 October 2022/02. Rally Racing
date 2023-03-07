@@ -1,0 +1,170 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Linq;
+using System.Text;
+using System.Runtime.ConstrainedExecution;
+
+namespace _02._Rally_Racing
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int size = int.Parse(Console.ReadLine());
+            string carNumber = Console.ReadLine();
+            string[,] matrix = new string[size, size];
+            int currentRow = 0;
+            int currentCol = 0;
+            int currentDistance = 0;
+            List<int> tunnels = new List<int>();
+
+            for (int row = 0; row < size; row++)
+            {
+                List<string> line = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList();
+
+                for (int col = 0; col < size; col++)
+                {
+                    matrix[row, col] = line[col];
+                    if (line[col] == "T")
+                    {
+                        tunnels.Add(row);
+                        tunnels.Add(col);
+                    }
+                }
+            }
+            if (matrix[0, 0] == "F")
+            {
+                Console.WriteLine($"Racing car {carNumber} finished the stage!");
+                Console.WriteLine($"Distance covered {currentDistance} km.");
+            }
+            if (matrix[0, 0] == "T")
+            {
+
+                if (tunnels[0] == 0 && tunnels[1] == 0)
+                {
+                    currentRow = tunnels[2];
+                    currentCol = tunnels[3];
+                    matrix[0, 0] = ".";
+                    matrix[currentRow, currentCol] = ".";
+                    currentDistance = 30;
+                }
+
+            }
+            string command = Console.ReadLine();
+            while (command != "End")
+            {
+                if (command == "left" && currentCol - 1 >= 0)
+                {
+
+                    currentCol = currentCol - 1;
+                    if (matrix[currentRow, currentCol] == ".")
+                    {
+                        currentDistance += 10;
+                    }
+
+                }
+                if (command == "right" && currentCol + 1 < size)
+                {
+                    currentCol = currentCol + 1;
+                    if (matrix[currentRow, currentCol] == ".")
+                    {
+                        currentDistance += 10;
+                    }
+
+                }
+                if (command == "up" && currentRow - 1 >= 0)
+                {
+
+
+                    currentRow = currentRow - 1;
+
+                    if (matrix[currentRow, currentCol] == ".")
+                    {
+                        currentDistance += 10;
+
+
+                    }
+
+
+                }
+                if (command == "down" && currentRow + 1 < size)
+                {
+                    currentRow = currentRow + 1;
+
+                    if (matrix[currentRow, currentCol] == ".")
+                    {
+                        currentDistance += 10;
+
+
+                    }
+
+
+                }
+                if (matrix[currentRow, currentCol] == "F")
+                {
+                    Console.WriteLine($"Racing car {carNumber} finished the stage!");
+                    Console.WriteLine($"Distance covered {currentDistance + 10} km.");
+                    for (int row = 0; row < size; row++)
+                    {
+                        for (int col = 0; col < size; col++)
+                        {
+                            if (row == currentRow && col == currentCol)
+                            {
+                                matrix[row, col] = "C";
+                            }
+
+                            Console.Write(matrix[row, col]);
+                        }
+
+                        Console.WriteLine();
+                    }
+                    return;
+
+                }
+                if (matrix[currentRow, currentCol] == "T")
+                {
+
+
+                    if (currentRow == tunnels[0] && currentCol == tunnels[1])
+                    {
+                        matrix[tunnels[0], tunnels[1]] = ".";
+                        currentRow = tunnels[2];
+                        currentCol = tunnels[3];
+                        matrix[currentRow, currentCol] = ".";
+                        currentDistance += 30;
+
+                    }
+                    else if (currentRow == tunnels[2] && currentCol == tunnels[3])
+                    {
+                        matrix[tunnels[2], tunnels[3]] = ".";
+                        currentRow = tunnels[0];
+                        currentCol = tunnels[1];
+                        matrix[currentRow, currentCol] = ".";
+                        currentDistance += 30;
+
+                    }
+
+
+                }
+                command = Console.ReadLine();
+            }
+            Console.WriteLine($"Racing car {carNumber} DNF.");
+            Console.WriteLine($"Distance covered {currentDistance} km.");
+            for (int row = 0; row < size; row++)
+            {
+                for (int col = 0; col < size; col++)
+                {
+                    if (row == currentRow && col == currentCol)
+                    {
+                        matrix[row, col] = "C";
+                    }
+                    Console.Write(matrix[row, col]);
+                }
+
+                Console.WriteLine();
+            }
+
+        }
+    }
+}
