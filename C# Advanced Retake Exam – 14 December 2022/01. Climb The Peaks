@@ -1,0 +1,100 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Linq;
+using System.Text;
+
+namespace _01._Climb_The_Peaks
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            List<int> portions = Console.ReadLine().Split(", ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
+            List<int> stamina = Console.ReadLine().Split(", ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
+            List<int> reversedPortions = new List<int>();
+           
+            List<int> peaksLevel = new List<int>();
+            List<string> peaksList = new List<string>();
+            peaksList.Add("Vihren");
+            peaksList.Add("Kutelo");
+            peaksList.Add("Banski Suhodol");
+            peaksList.Add("Polezhan");
+            peaksList.Add("Kamenitza");
+            peaksLevel.Add(80);
+            peaksLevel.Add(90);
+            peaksLevel.Add(100);
+            peaksLevel.Add(60);
+            peaksLevel.Add(70);
+            int counter = 0;
+            List<string> peaksList1 = new List<string>();
+            peaksList1 = peaksList.ToList();
+            List<string> peaksList2 = new List<string>();
+            bool isSuccess = false;
+            for (int i = portions.Count - 1; i >= 0; i--)
+            {
+                reversedPortions.Add(portions[i]);
+            }
+
+            for (int j = 0; ; )
+            {
+                counter++;
+                if (peaksLevel.Count == 0)
+                {
+                    isSuccess = true;
+                    break;
+                }
+                if (counter > 7)
+                {
+                    break;
+                }
+                if (reversedPortions.Count == 0)
+                {
+                    break;
+                }
+                if (stamina.Count == 0)
+                {
+                    break;
+                }
+               
+                double sum = reversedPortions[j] + stamina[j];
+                if (sum >= peaksLevel[j])
+                {
+                    reversedPortions.Remove(reversedPortions[j]);
+                    stamina.Remove(stamina[j]);
+                    peaksLevel.Remove(peaksLevel[j]);
+                    peaksList2.Add(peaksList1[j]);
+                    peaksList1.Remove(peaksList1[j]);
+                    
+                    continue;
+                }
+                if (sum < peaksLevel[j])
+                {
+                    reversedPortions.Remove(reversedPortions[j]);
+                    stamina.Remove(stamina[j]);
+                    
+                }
+
+            }
+            if (isSuccess)
+            {
+                Console.WriteLine("Alex did it! He climbed all top five Pirin peaks in one week -> @FIVEinAWEEK");
+
+
+            }
+            if (isSuccess == false)
+            {
+                Console.WriteLine("Alex failed! He has to organize his journey better next time -> @PIRINWINS");
+            }
+
+            if (peaksList2.Count > 0)
+            {
+                Console.WriteLine("Conquered peaks:");
+                foreach (var peak in peaksList2)
+                {
+                    Console.WriteLine(peak);
+                }
+            }
+        }
+    }
+}
