@@ -1,0 +1,122 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Linq;
+using System.Text;
+
+namespace _02._Navy_Battle
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int size = int.Parse(Console.ReadLine());
+            char[,] matrix = new char[size, size];
+            int currentRow = 0;
+            int currentCol = 0;
+            int counterMine = 0;
+            int counterC = 0;
+            bool isWin = false;
+            bool isLost = false;
+            for (int row = 0; row < size; row++)
+            {
+                char[] chars = Console.ReadLine().ToCharArray();
+                for(int col = 0; col < size; col++)
+                {
+                    matrix[row, col] = chars[col];
+                    if (matrix[row, col] == 'S')
+                    {
+                        currentRow = row;
+                        currentCol = col;
+                    }
+                }
+            }
+            string command = Console.ReadLine();
+            while(true)
+            {
+                
+                if(command == "up")
+                {
+                    if(currentRow > 0)
+                    {
+                        matrix[currentRow, currentCol] = '-';
+                        currentRow--;
+                    }
+                }
+                if (command == "down")
+                {
+                    if (currentRow < size - 1)
+                    {
+                        matrix[currentRow, currentCol] = '-';
+                        currentRow++;
+                    }
+                }
+                if (command == "left")
+                {
+                    if (currentCol > 0)
+                    {
+                        matrix[currentRow, currentCol] = '-';
+                        currentCol--;
+                    }
+                }
+                if (command == "right")
+                {
+                    if (currentCol < size - 1)
+                    {
+                        matrix[currentRow, currentCol] = '-';
+                        currentCol++;
+                    }
+                }
+                if (matrix[currentRow, currentCol] == '*')
+                {
+                    counterMine++;
+                    if(counterMine > 2)
+                    {
+                        isLost= true;
+                        break;
+                    }
+                    matrix[currentRow, currentCol] = '-';
+                    command = Console.ReadLine();
+                    continue;
+                }
+                if (matrix[currentRow, currentCol] == 'C')
+                {
+                    counterC++;
+                    if(counterC > 2)
+                    {
+                        isWin = true;
+                        break;
+                    }
+                    matrix[currentRow, currentCol] = '-';
+                    command = Console.ReadLine();
+                    continue;
+                }
+                if (matrix[currentRow, currentCol] == '-')
+                {
+                    command = Console.ReadLine();
+                    continue;
+                }
+            }
+            if(isWin)
+            {
+                Console.WriteLine("Mission accomplished, U-9 has destroyed all battle cruisers of the enemy!");
+            }
+            if(isLost)
+            {
+                Console.WriteLine($"Mission failed, U-9 disappeared! Last known coordinates [{currentRow}, {currentCol}]!");
+            }
+            for(int row = 0; row < size; row++)
+            {
+                for(int col = 0; col < size; col++)
+                {
+                    if(row == currentRow && col == currentCol)
+                    {
+                        matrix[currentRow, currentCol] = 'S';
+                    }
+                    Console.Write(matrix[row, col]);
+                }
+                Console.WriteLine();
+            }
+        }
+    }
+}
