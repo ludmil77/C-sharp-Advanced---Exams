@@ -1,0 +1,116 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace _01._Apocalypse_Preparation
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            List<int> textiles = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
+            List<int> medicaments = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
+            List<int> reversedMedicaments = new List<int>();
+            Dictionary<string, int> apocalypses = new Dictionary<string, int>();
+            for (int i = medicaments.Count - 1; i >= 0; i--)
+            {
+                reversedMedicaments.Add(medicaments[i]);
+            }
+            for(int j = 0; ; )
+            {
+                int residue = 0;
+                if(textiles.Count == 0)
+                {
+                    break;
+                }
+                if(reversedMedicaments.Count == 0)
+                {
+                    break;
+                }
+                int result = textiles[j] + reversedMedicaments[j];
+                if(result == 30)
+                {
+                    if(!apocalypses.ContainsKey("Patch"))
+                    {
+                        apocalypses.Add("Patch", 0);
+                    }
+                    apocalypses["Patch"]++;
+                    textiles.Remove(textiles[j]);
+                    reversedMedicaments.Remove(reversedMedicaments[j]);
+                    continue;
+                }
+                if (result == 40)
+                {
+                    if (!apocalypses.ContainsKey("Bandage"))
+                    {
+                        apocalypses.Add("Bandage", 0);
+                    }
+                    apocalypses["Bandage"]++;
+                    textiles.Remove(textiles[j]);
+                    reversedMedicaments.Remove(reversedMedicaments[j]);
+                    continue;
+                }
+                if (result == 100)
+                {
+                    if (!apocalypses.ContainsKey("MedKit"))
+                    {
+                        apocalypses.Add("MedKit", 0);
+                    }
+                    apocalypses["MedKit"]++;
+                    textiles.Remove(textiles[j]);
+                    reversedMedicaments.Remove(reversedMedicaments[j]);
+                    continue;
+                }
+                if(result > 100)
+                {
+                    if (!apocalypses.ContainsKey("MedKit"))
+                    {
+                        apocalypses.Add("MedKit", 0);
+                    }
+                    apocalypses["MedKit"]++;
+                    residue = result - 100;
+                    textiles.Remove(textiles[j]);
+                    reversedMedicaments.Remove(reversedMedicaments[j]);
+                    reversedMedicaments[j] += residue;
+                    continue;
+                }
+                else
+                {
+                    textiles.Remove(textiles[j]);
+                    reversedMedicaments[j] += 10;
+                }
+            }
+            if(textiles.Count == 0 && reversedMedicaments.Count == 0)
+            {
+                Console.WriteLine("Textiles and medicaments are both empty.");
+               
+            }
+            if(textiles.Count == 0 && reversedMedicaments.Count > 0)
+            {
+                Console.WriteLine("Textiles are empty.");
+            }
+            if(textiles.Count > 0 && reversedMedicaments.Count == 0)
+            {
+                Console.WriteLine("Medicaments are empty.");
+            }
+            foreach (var apocalypse in apocalypses.OrderByDescending(x => x.Value).ThenBy(x => x.Key))
+            {
+                Console.WriteLine($"{apocalypse.Key} - {apocalypse.Value}");
+            }
+            if(textiles.Count > 0)
+            {
+                
+                
+                    Console.WriteLine("Textiles left: " + String.Join(", ", textiles));
+                
+            }
+            if (reversedMedicaments.Count > 0)
+            {
+                
+                
+                    Console.WriteLine("Medicaments left: " + String.Join(", ", reversedMedicaments));
+                
+            }
+        }
+    }
+}
