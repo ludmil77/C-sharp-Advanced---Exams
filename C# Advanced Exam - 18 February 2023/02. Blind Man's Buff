@@ -1,0 +1,120 @@
+using System;
+using System.Linq;
+
+namespace _02._Blind_Man_s_Buff_2
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] sizes = Console.ReadLine().Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
+            int rows = sizes[0];
+            int cols = sizes[1];
+            char[,] matrix = new char[rows, cols];
+            int currentRow = 0;
+            int currentCol = 0;
+            int moves = 0;
+            int opponent = 0;
+            for(int row = 0; row < rows; row++)
+            {
+                char[] colums = Console.ReadLine().Replace(" ", "").ToCharArray();
+                for(int col =  0; col < cols; col++)
+                {
+                    matrix[row, col] = colums[col];
+                    if (matrix[row, col] == 'B')
+                    {
+                        currentRow = row;
+                        currentCol = col;
+                    }
+                }
+            }
+            matrix[currentRow, currentCol] = '-';
+            string command = Console.ReadLine();
+            while(command != "Finish")
+            {
+                if(command == "up")
+                {
+                    if(currentRow <= 0)
+                    {
+                        command = Console.ReadLine();
+                        continue;
+                    }
+                    currentRow--;
+                    if (matrix[currentRow, currentCol] == 'O')
+                    {
+                        currentRow++;
+                        command = Console.ReadLine();
+                        continue;
+                    }
+                }
+                if(command == "down")
+                {
+                    if(currentRow >= rows - 1)
+                    {
+                        command = Console.ReadLine();
+                        continue;
+                    }
+                    currentRow++;
+                    if (matrix[currentRow, currentCol] == 'O')
+                    {
+                        currentRow--;
+                        command = Console.ReadLine();
+                        continue;
+                    }
+                }
+                if(command == "left")
+                {
+                    if(currentCol <= 0)
+                    {
+                        command= Console.ReadLine();
+                        continue;
+                    }
+                    currentCol--;
+                    if (matrix[currentRow, currentCol] == 'O')
+                    {
+                        currentCol++;
+                        command = Console.ReadLine();
+                        continue;
+                    }
+                }
+                if(command == "right")
+                {
+                    if(currentCol >= cols - 1)
+                    {
+                        command= Console.ReadLine();
+                        continue;
+                    }
+                    currentCol++;
+                    if (matrix[currentRow, currentCol] == 'O')
+                    {
+                        currentCol--;
+                        command = Console.ReadLine();
+                        continue;
+                    }
+                }
+                if (matrix[currentRow, currentCol] == '-')
+                {
+                    moves++;
+                    command = Console.ReadLine();
+                    continue;
+                }
+                if (matrix[currentRow, currentCol] == 'P')
+                {
+                    matrix[currentRow, currentCol] = '-';
+                    moves++;
+                    opponent++;
+                    if(opponent == 3)
+                    {
+                        Console.WriteLine("Game over!");
+                        Console.WriteLine($"Touched opponents: {opponent} Moves made: {moves}");
+                        return; 
+                    }
+                }
+
+                command = Console.ReadLine();
+            }
+            Console.WriteLine("Game over!");
+            Console.WriteLine($"Touched opponents: {opponent} Moves made: {moves}");
+        }
+    }
+}
