@@ -1,0 +1,67 @@
+using System;
+
+namespace _02._Pawn_Wars_1
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int rowW = 0;
+            int colW = 0;
+            int rowB = 0;
+            int colB = 0;
+            char[,] matrix = new char[8,8];
+            for(int row = 0; row < 8; row++)
+            {
+                char[] columns = Console.ReadLine().Replace(" ", "").ToCharArray();
+                for(int col = 0; col < 8; col++)
+                {
+                    matrix[row, col] = columns[col];
+                    if (matrix[row, col] == 'w')
+                    {
+                        rowW = row;
+                        colW = col;
+                    }
+                    if (matrix[row, col] == 'b')
+                    {
+                        rowB = row;
+                        colB = col;
+                    }
+                }
+            }
+            for(int i = 0; ; i++)
+            {
+                if(i % 2 == 0)
+                {
+                    if((rowB + 1 == rowW && colB + 1 == colW) || (rowB + 1 == rowW && colB - 1 == colW))
+                    {
+                        Console.WriteLine($"Game over! White capture on {(char)(colB + 97)}{8 - rowB}.");
+                        return;
+                    }
+                   
+                    if (rowW - 1 == 0)
+                    {
+                        Console.WriteLine($"Game over! White pawn is promoted to a queen at {(char)(colW + 97)}{8}.");
+                        return;
+                    }
+                    rowW--;
+                }
+                if((i % 2) == 1)
+                {
+                    if((rowB + 1 == rowW && colB + 1 == colW) || (rowB + 1 == rowW && colB - 1 == colW))
+                    {
+                        Console.WriteLine($"Game over! Black capture on {(char)(colW + 97)}{8 - rowW}.");
+                        return;
+                    }
+                   
+                    if(rowB + 1 == 7)
+                    {
+                        Console.WriteLine($"Game over! Black pawn is promoted to a queen at {(char)(colB + 97)}{1}.");
+                        return;
+                    }
+                    rowB++;
+                }
+            }
+        }
+    }
+}
