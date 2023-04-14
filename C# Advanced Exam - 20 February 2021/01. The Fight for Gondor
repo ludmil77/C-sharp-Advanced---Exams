@@ -1,0 +1,77 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace _01._The_Fight_for_Gondor_1
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int numberOfWaves = int.Parse(Console.ReadLine());
+            List<int> plates = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
+            List<int> reversedOrcs = new List<int>();
+            for (int i = 1; i <= numberOfWaves; i++)
+            {
+                if (plates.Count == 0)
+                {
+                    break;
+                }
+                int[] warriorOrcs = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
+                
+                reversedOrcs = warriorOrcs.Reverse().ToList();
+                if(i % 3 == 0)
+                {
+                    int plateToAdd = int.Parse(Console.ReadLine());
+                    plates.Add(plateToAdd);
+                }
+                for(int j = 0; ;)
+                {
+                    if(reversedOrcs.Count == 0)
+                    {
+                        break;
+                    }
+                    if(plates.Count == 0)
+                    {
+                        break;
+                    }
+                    
+                    if (reversedOrcs[j] > plates[j])
+                    {
+                        reversedOrcs[j] -= plates[j];
+                        plates.Remove(plates[j]);
+                        continue;
+                    }
+                    if(reversedOrcs[j] < plates[j])
+                    {
+                        plates[j] -= reversedOrcs[j];
+                        reversedOrcs.Remove(reversedOrcs[j]);
+                        continue;
+                    }
+                    if(reversedOrcs[j] == plates[j])
+                    {
+                        plates.Remove(plates[j]);
+                        reversedOrcs.Remove(reversedOrcs[j]);
+                    }
+                }
+
+            }
+            if(plates.Count == 0)
+            {
+                Console.WriteLine("The orcs successfully destroyed the Gondor's defense.");
+            }
+            if(plates.Count > 0)
+            {
+                Console.WriteLine("The people successfully repulsed the orc's attack.");
+            }
+            if(reversedOrcs.Count > 0)
+            {
+                Console.WriteLine($"Orcs left: " + String.Join(", ", reversedOrcs));
+            }
+            if(plates.Count > 0)
+            {
+                Console.WriteLine($"Plates left: " + String.Join(", ", plates));
+            }
+        }
+    }
+}
